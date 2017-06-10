@@ -203,12 +203,14 @@ class GroupNode(object):
         s = "    " * indent
         if self.name == "":
             assert indent == 0
+            sorted_cmd = sorted(self.commands, key=lambda c: c.attributes['nickname'])
             val = "\n".join([group.to_config_string(0) for group in self.subgroups.values()])
-            val = val + "\n".join([cmd.to_config_string(0) for cmd in self.commands]) + "\n"
+            val = val + "\n".join([cmd.to_config_string(0) for cmd in sorted_cmd]) + "\n"
         else:
             val = "%sgroup \"%s\" {\n" % (s, self.name)
+            sorted_cmd = sorted(self.commands, key=lambda c: c.attributes['nickname'])
             val = val + "\n".join([group.to_config_string(indent+1) for group in self.subgroups.values()])
-            val = val + "\n".join([cmd.to_config_string(indent+1) for cmd in self.commands])
+            val = val + "\n".join([cmd.to_config_string(indent+1) for cmd in sorted_cmd])
             val = val + "\n%s}\n" % s
         return val
 
